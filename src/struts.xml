@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+
+	<!-- 配置struts2的常量 -->
+	<!-- 配置扩展名 -->
+	<constant name="struts.action.extension" value="action"/>
+	<!-- 文件上传的总大小(5M) -->
+	<constant name="struts.multipart.maxSize" value="5242880" />
+	
+	<!-- 配置Action -->
+	<package name="crm" extends="struts-default" namespace="/">
+		
+		<!-- 用户 -->
+		<action name="user_*" class="userAction" method="{1}">
+			<result name="login">/login.jsp</result>
+			<result name="success" type="redirect">/index.jsp</result>
+			
+		</action>
+		
+		<!-- 客户 -->
+		<action name="customer_*" class="customerAction" method="{1}">
+			<result name="saveUI">/jsp/customer/add.jsp</result>
+			<result name="findAll">/jsp/customer/list.jsp</result>
+			<result name="saveSuccess" type="redirectAction">customer_findAll.action</result>
+			<result name="deleteSuccess" type="redirectAction">customer_findAll.action</result>
+			<result name="editSuccess">/jsp/customer/edit.jsp</result>
+			<result name="updateSuccess" type="redirectAction">customer_findAll.action</result>
+			<result name="input">/jsp/customer/add.jsp</result>
+			
+			<!-- 设置拦截器 -->
+			<interceptor-ref name="defaultStack">
+				<!-- 单个文件大小 -->
+				<param name="fileUpload.maximumSize">2097150</param>
+				<!-- 设置扩展名 -->
+				<param name="fileUpload.allowedExtensions">.jpg,.png</param>
+			</interceptor-ref>
+			
+		</action>
+		
+		<!-- 联系人 -->
+		<action name="linkMan_*" class="linkManAction" method="{1}">
+			<result name="findAll">/jsp/linkman/list.jsp</result>
+			<result name="saveUI">/jsp/linkman/add.jsp</result>
+			<result name="saveSuccess" type="redirectAction">linkMan_findAll.action</result>
+			<result name="editSuccess">/jsp/linkman/edit.jsp</result>
+			<result name="updateSuccess" type="redirectAction">linkMan_findAll.action</result>
+			<result name="deleteSuccess" type="redirectAction">linkMan_findAll.action</result>
+			
+		</action>
+		
+		<!-- 数据字典查询 -->
+		<action name="baseDict_*" class="baseDictAction" method="{1}"></action>
+		
+		
+		
+	</package>    
+
+</struts>
