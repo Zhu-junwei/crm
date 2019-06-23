@@ -15,6 +15,9 @@
 	
 	<!-- 引入外部属性文件 -->
 	<context:property-placeholder location="classpath:jdbc.properties"/>
+	<!-- 开启属性注入的注解 -->
+	<context:annotation-config />
+	
 	<!-- 配置C3P0连接池 -->
 	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
 		<property name="driverClass" value="${jdbc.driverClass}"/>
@@ -45,6 +48,7 @@
 				<value>com/zhujunwei/domain/Customer.hbm.xml</value>
 				<value>com/zhujunwei/domain/BaseDict.hbm.xml</value>
 				<value>com/zhujunwei/domain/LinkMan.hbm.xml</value>
+				<value>com/zhujunwei/domain/SaleVisit.hbm.xml</value>
 			</list>
 		</property>
 	</bean>
@@ -64,32 +68,32 @@
 	</bean>
 	
 	<!-- 配置客户相关的类 -->
-	<!-- 配置Action -->	
 	<bean id="customerAction" class="com.zhujunwei.web.action.CustomerAction" scope="prototype">
 		<property name="customerService" ref="customerService" />
 	</bean>
-	<!-- 配置Service -->	
 	<bean id="customerService" class="com.zhujunwei.service.imp.CustomerServiceImp">
 		<property name="customerDao" ref="customerDao" />
 	</bean>
-	<!-- 配置DAO -->	
 	<bean id="customerDao" class="com.zhujunwei.dao.imp.CustomerDaoImp">
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
 	
 	<!-- 配置联系人相关的类 -->
-	<!-- 配置Action -->	
 	<bean id="linkManAction" class="com.zhujunwei.web.action.LinkManAction" scope="prototype">
 		<property name="linkManService" ref="linkManService" />
 		<property name="customerService" ref="customerService" />
-		
 	</bean>
-	<!-- 配置Service -->	
 	<bean id="linkManService" class="com.zhujunwei.service.imp.LinkManServiceImp">
 		<property name="linkManDao" ref="linkManDao" />
 	</bean>
-	<!-- 配置DAO -->	
 	<bean id="linkManDao" class="com.zhujunwei.dao.imp.LinkManDaoImp">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	
+	<!-- 配置访问记录相关的类 -->
+	<bean id="saleVisitAction" class="com.zhujunwei.web.action.SaleVisitAction" scope="prototype"></bean>
+	<bean id="saleVisitService" class="com.zhujunwei.service.imp.SaleVisitServiceImp"></bean>
+	<bean id="saleVisitManDao" class="com.zhujunwei.dao.imp.SaleVisitDaoImp">
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
 	
@@ -115,4 +119,5 @@
 	
 	<!-- 开启注解事务 -->
 	<tx:annotation-driven transaction-manager="transactionManager"/>
+	
 </beans>

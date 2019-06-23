@@ -1,5 +1,7 @@
 package com.zhujunwei.service.imp;
 
+import java.util.List;
+
 import com.zhujunwei.dao.UserDao;
 import com.zhujunwei.domain.User;
 import com.zhujunwei.service.UserService;
@@ -32,6 +34,12 @@ public class UserServiceImp implements UserService {
 		//对密码进行加密处理
 		user.setUser_password(MD5Utils.md5(user.getUser_password()));
 		return userDao.login(user);
+	}
+
+
+	@Override
+	public List<User> findAll() {
+		return userDao.findAll();
 	}
 
 }

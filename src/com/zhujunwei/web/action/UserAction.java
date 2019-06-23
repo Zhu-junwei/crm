@@ -1,10 +1,17 @@
 package com.zhujunwei.web.action;
 
+import java.io.IOException;
+import java.util.List;
+import org.apache.struts2.ServletActionContext;
+
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ModelDriven;
 import com.zhujunwei.domain.User;
 import com.zhujunwei.service.UserService;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JsonConfig;
 
 public class UserAction extends ActionSupport implements ModelDriven<User>{
 
@@ -45,6 +52,22 @@ public class UserAction extends ActionSupport implements ModelDriven<User>{
 			ActionContext.getContext().getSession().put("existUser", existUser);
 			return SUCCESS ;
 		}
+	}
+	
+	/**
+	 * @throws IOException 
+	 * 
+	 */
+	public String findAllUser() throws IOException {
+		List<User> list = userService.findAll();
+		//将list转成JSON
+		JsonConfig config = new JsonConfig();
+		
+		//转成json
+		JSONArray jsonArray = JSONArray.fromObject(list, config);
+		ServletActionContext.getResponse().setContentType("text/html;charset=utf-8");
+		ServletActionContext.getResponse().getWriter().println(jsonArray.toString());
+		return NONE ;
 	}
 	
 }

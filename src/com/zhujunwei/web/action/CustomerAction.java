@@ -2,8 +2,10 @@ package com.zhujunwei.web.action;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.struts2.ServletActionContext;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
 
@@ -14,6 +16,9 @@ import com.zhujunwei.domain.Customer;
 import com.zhujunwei.domain.PageBean;
 import com.zhujunwei.service.CustomerService;
 import com.zhujunwei.utils.UploadUtils;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JsonConfig;
 
 public class CustomerAction extends ActionSupport implements ModelDriven<Customer> {
 
@@ -217,5 +222,24 @@ public class CustomerAction extends ActionSupport implements ModelDriven<Custome
 		}
 		customerService.update(customer);
 		return "updateSuccess";
+	}
+	
+	/**
+	 * 以json格式返回Customer对象list
+	 * @return
+	 * @throws IOException
+	 */
+	public String findAllCustomer() throws IOException {
+		List<Customer> list = customerService.findAll();
+		//将list转成JSON
+		JsonConfig config = new JsonConfig();
+		config.setExcludes(new String[] {"linkMans","baseDictSource","baseDictLevel","baseDictIndustry"});
+		
+		//转成json
+		JSONArray jsonArray = JSONArray.fromObject(list, config);
+		ServletActionContext.getResponse().setContentType("text/html;charset=utf-8");
+		ServletActionContext.getResponse().getWriter().println(jsonArray.toString());
+		return NONE ;
+		
 	}
 }
